@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanghao.cms.dao.ArticleMapper">
+	
+	<resultMap type="article" id="articleMapper">
+		<result property="channelId" column="channel_id"/>
+		<result property="categoryId" column="category_id"/>
+		<association property="channel" column="channel_id" javaType="com.wanghao.cms.entity.Channel" 
+		   select="findChannel"></association>
+		<association property="category" column="category_id" javaType="com.wanghao.cms.entity.Category" 
+		   select="findCatigory"></association>
+	   <association property="user" column="user_id" javaType="com.wanghao.cms.entity.User"  
+	   select="findUserById"></association>
+	</resultMap>
+		
+	<select id="listByUser" resultMap="articleMapper">
+		SELECT id,title,channel_id,category_id , created,status 
+		  FROM cms_article
+		  WHERE user_id = #{value} AND deleted=0
+		  ORDER BY id DESC  
+	</select>
+	
+	<!-- 获取频道 resultMap的查找方法 -->
+	<select id="findChannel" resultType="channel">
+		SELECT id,name FROM cms_channel WHERE id=#{value}
+	</select>
+	
+	<!-- 获取分类resultMap的查找方法 -->
+	<select id="findCatigory" resultType="category">
+		SELECT id,name FROM cms_category WHERE id=#{value}
+	</select>
+<!-- 	获取作者名 -->
+	 <select id="findUserById" resultType="user">
+			SELECT id,username FROM cms_user WHERE id=#{value}
+	  </select>
+<!-- 	查找文章 -->
+	<select id="getById" resultMap="articleMapper" >
+		SELECT * FROM cms_article WHERE id=#{value} AND deleted=0
+	</select>
+	
+	<select id="list" resultMap="articleMapper">
+	  SELECT id,title,channel_id,category_id ,user_id, created,status ,hot
+		  FROM cms_article
+		  WHERE
+		  <if test="status!='' and status!=null">
+		  status = #{status} and
+		  </if>
+		  deleted=0
+		  ORDER BY id DESC  
+	</select>
+</mapper>
