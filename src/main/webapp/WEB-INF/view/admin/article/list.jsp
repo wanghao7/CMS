@@ -90,12 +90,11 @@
 
 
 <script>
-$(function(){
+
 	$("#exampleModal").on('hidden.bs.modal', function (e) {
-	refreshPage();
+		refreshPage();
 	})
-	
-})
+
 	function gb(status){
 		$("#workcontent").load("/admin/article?page=" + '${articlePage.pageNum}' + "&status="+status);
 	}
@@ -124,7 +123,7 @@ $(function(){
 		$.post("/admin/setArticleStatus",{id:id,status:status},function(obj){
 			if(obj.code==1){
 				alert("操作成功");
-				$("#articleContent").modal('hide');
+				$("#exampleModal").modal('hide');
 				//refreshPage();
 				return;
 			}
@@ -142,7 +141,7 @@ $(function(){
 			if(msg.code==1){
 				alert('操作成功')
 				//隐藏当前的模态框
-				$('#articleContent').modal('hide')
+				$('#exampleModal').modal('hide')
 				//刷新当前的页面
 				//refreshPage();
 				return;

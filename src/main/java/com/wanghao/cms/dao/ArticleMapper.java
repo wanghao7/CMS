@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
+import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Link;
+import com.wanghao.cms.entity.Slide;
 
 public interface ArticleMapper {
 
@@ -98,4 +102,61 @@ public interface ArticleMapper {
 	 */
 	@Update("UPDATE cms_article SET status=#{myStatus} WHERE id=#{myid}")
 	int CheckStatus(@Param("myid") int id, @Param("myStatus") int status);
+
+	/**
+	 * 热门文章
+	 * @return
+	 */
+	List<Article> hostList();
+//最新文章
+	List<Article> lastList(int pageSize);
+//轮播图
+	List<Slide> getSlides();
+	/**
+	 * 根据频道和栏目获取文章
+	 * @param channleId
+	 * @param catId
+	 * @return
+	 */
+	List<Article> getArticles(@Param("channelId")int channelId,@Param("catId") int catId);
+
+	/**
+	 * 根据频道获取栏目
+	 * @param channelId
+	 * @return
+	 */
+	@Select("SELECT id,name FROM cms_category where channel_id=#{value}")
+	@ResultType(Category.class)
+	List<Category> getCategoriesByChannelId(int channelId);
+
+	/**
+	 * 添加数据(评论)
+	 * @param comment
+	 * @return
+	 */
+	@Insert("INSERT INTO cms_comment(articleId,userId,content,created) "
+			+ "VALUES(#{articleId},#{userId},#{content},NOW());")
+	int addComment(Comment comment);
+
+	/**
+	 * 文章评论加一
+	 * @param userId
+	 * @return
+	 */
+	@Update("UPDATE cms_article SET commentCnt=commentCnt+1 WHERE id=#{value}")
+	int increaseCommentCount(int userId);
+
+	/**
+	 * 获取评论
+	 * @param articleId
+	 * @return
+	 */
+	@Select(" SELECT c.id,c.articleId,c.userId,u.username username,c.content,c.created FROM cms_comment c "
+			+ " LEFT JOIN cms_user u on u.id=c.userId "
+			+ "WHERE articleId=#{value} ORDER BY c.created DESC")
+	List<Comment> getComments(int articleId);
+
+	@Select(" SELECT id,url,name,created FROM cms_link  ORDER BY created DESC")
+	List<Link> getLink();
+
 }

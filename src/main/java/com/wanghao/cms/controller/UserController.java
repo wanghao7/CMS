@@ -53,6 +53,10 @@ public class UserController {
 	ArticleService   articleService;
 	
 	
+	@RequestMapping("home")
+	public String home() {
+		return "user/home";
+	}
 	@RequestMapping(value="login",method=RequestMethod.GET)
 	public String show() {
 		return "user/login";
@@ -124,14 +128,14 @@ public class UserController {
 		}
 		//登录成功,用户信息存进session当中
 		request.getSession().setAttribute(CmsContant.USER_KEY, u);
-		System.out.println("admin_____1____");
+//		System.out.println("admin_____1____");
 		//判断 并进入管理界面/用户界面
 		System.out.println(u.getRole()+"______");
 		if(u.getRole()==CmsContant.USER_ROLE_ADMIN) {
-			System.out.println("admin____2_____");
+//			System.out.println("admin____2_____");
 			return "/admin/index";
 		}
-		System.out.println("admin___3______");
+//		System.out.println("admin___3______");
 		//需要改
 		return "/user/home";
 	}
@@ -256,7 +260,7 @@ public class UserController {
 		
 		//获取文章
 		Article article =  articleService.getById(id);
-		System.out.println("__________________"+article);
+//		System.out.println("__________________"+article);
 		User user = (User) request.getSession().getAttribute(CmsContant.USER_KEY);
 		//数据库文章的id跟session里的yonghuid相比较
 		if(user.getId()!=article.getUserId()) {

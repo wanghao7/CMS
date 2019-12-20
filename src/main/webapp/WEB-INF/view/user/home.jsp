@@ -77,7 +77,10 @@
 			<!-- 左侧的菜单 -->
 			<ul class="nav flex-column mymenuselected">
 				  <li class="nav-item menuselected ">
-				    <a id="postLink" class="nav-link active" href="#" onclick="showWork($(this),'/user/articles')" >我的文章</a>
+				    <a id="postLink" class="nav-link active" href="/"  >首页</a>
+				  </li>
+				  <li class="nav-item menuselected ">
+				    <a id="postLink" class="nav-link " href="#" onclick="showWork($(this),'/user/articles')" >我的文章</a>
 				  </li>
 				  <li class="nav-item">
 				    <a  class="nav-link" href="#" onclick="showWork($(this),'/user/postArticle')">发表文章</a>

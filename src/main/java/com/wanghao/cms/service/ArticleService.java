@@ -6,6 +6,9 @@ import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
+import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Link;
+import com.wanghao.cms.entity.Slide;
 
 public interface ArticleService {
 
@@ -30,5 +33,27 @@ public interface ArticleService {
 	int setCheckStatus(int id, int status);
 
 	int setHot(int id, int status);
+
+	PageInfo<Article> hotList(int page);
+
+	List<Article> lastLiat();
+
+	List<Slide> getSlides();
+	/**
+	 * 获取栏目下的文章
+	 * @param channleId
+	 * @param catId
+	 * @param page
+	 * @return
+	 */
+	PageInfo<Article> getArticles(int channelId, int catId, int page);
+
+	List<Category> getCategoriesByChannelId(int channelId);
+
+	int addComment(Comment comment);
+
+	PageInfo<Comment> getComments(int id, int page);
+
+	PageInfo<Link> link(int page);
 
 }

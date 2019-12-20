@@ -16,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.common.CmsError;
 import com.wanghao.cms.common.CmsMessage;
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Link;
 import com.wanghao.cms.service.ArticleService;
 @RequestMapping("admin")
 @Controller
@@ -133,6 +134,17 @@ public class AdminController {
 		return new CmsMessage(CmsError.SUCCESS,"成功",null);
 		
 	}
-	
+	/**
+	 * 友情链接
+	 * @return
+	 */
+	@RequestMapping("link")
+	public String link(Model m,@RequestParam(defaultValue="1") int page) {
+		
+		PageInfo<Link> pageInfo = articleService.link(page);
+		m.addAttribute("pageInfo", pageInfo);
+		
+		return "admin/link/list";
+	}
 	
 }

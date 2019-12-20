@@ -63,7 +63,7 @@
 				    <a  class="nav-link" href="#" onclick="showWork($(this),'/user/postArticle')">评论管理</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link" href="#" onclick="showWork($(this),'/user/comments')" >友情链接管理</a>
+				    <a class="nav-link" href="#" onclick="showWork($(this),'/admin/link')" >友情链接管理</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link " href="#" >用户管理</a>

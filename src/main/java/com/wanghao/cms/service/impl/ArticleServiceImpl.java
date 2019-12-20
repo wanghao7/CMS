@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wanghao.cms.dao.SlideMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.common.CmsContant;
@@ -12,6 +13,9 @@ import com.wanghao.cms.dao.ArticleMapper;
 import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
+import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Link;
+import com.wanghao.cms.entity.Slide;
 import com.wanghao.cms.service.ArticleService;
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -19,6 +23,9 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	ArticleMapper articleMapper;
 
+	@Autowired
+	SlideMapper slideMapper;
+	
 	@Override
 	public PageInfo<Article> listByUser(int id, int pageNum) {
 		// TODO Auto-generated method stub
@@ -90,4 +97,63 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		return articleMapper.setHot(id,status);
 	}
+
+	@Override
+	public PageInfo<Article> hotList(int page) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
+		return new PageInfo<>(articleMapper.hostList());
+	}
+
+	@Override
+	public List<Article> lastLiat() {
+		// TODO Auto-generated method stub
+		
+		return articleMapper.lastList(CmsContant.PAGE_SIZE);
+	}
+
+	@Override
+	public List<Slide> getSlides() {
+		// TODO Auto-generated method stub
+		return slideMapper.getSlides();
+	}
+
+	@Override
+	public PageInfo<Article> getArticles(int channelId, int catId, int page) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
+		return  new PageInfo<Article>(articleMapper.getArticles(channelId,catId)) ;
+	}
+
+	@Override
+	public java.util.List<Category> getCategoriesByChannelId(int channelId) {
+		// TODO Auto-generated method stub
+		return articleMapper.getCategoriesByChannelId(channelId);
+	}
+
+	@Override
+	public int addComment(Comment comment) {
+		// TODO Auto-generated method stub
+		int result = articleMapper.addComment(comment);
+		if(result>0) {
+			articleMapper.increaseCommentCount(comment.getUserId());
+		}
+		return result;
+	}
+
+	@Override
+	public PageInfo<Comment> getComments(int articleId, int page) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
+		return new PageInfo<Comment>(articleMapper.getComments(articleId));
+	}
+
+	@Override
+	public PageInfo<Link> link(int page) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
+		return new PageInfo<Link>(articleMapper.getLink());
+	}
+	
+	
 }
