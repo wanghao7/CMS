@@ -41,7 +41,7 @@ public class AdminController {
 		PageInfo<Article> articlePage =  articleService.List(status ,page);
 		request.setAttribute("status", status);
 		request.setAttribute("articlePage", articlePage);
-		return "admin/article/list";
+		return "/admin/article/list";
 		
 	}
 //	@RequestMapping("articles")

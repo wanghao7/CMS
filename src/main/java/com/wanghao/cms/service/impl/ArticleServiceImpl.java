@@ -2,6 +2,8 @@ package com.wanghao.cms.service.impl;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Complain;
 import com.wanghao.cms.entity.Link;
 import com.wanghao.cms.entity.Slide;
 import com.wanghao.cms.service.ArticleService;
@@ -153,6 +156,24 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
 		return new PageInfo<Link>(articleMapper.getLink());
+	}
+
+	@Override
+	public int addComplian(@Valid Complain complain) {
+		//添加投诉到数据库
+		int result = articleMapper.addCoplain(complain);
+		// 增加投诉的数量
+		if(result>0)
+			articleMapper.increaseComplainCnt(complain.getArticleId());
+		
+		return 0;
+	}
+
+	@Override
+	public PageInfo<Complain> getComplains(int articleId, int page) {
+		
+		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
+		return new PageInfo<Complain>(articleMapper.getComplains(articleId));
 	}
 	
 	

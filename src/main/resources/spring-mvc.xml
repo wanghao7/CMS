@@ -35,6 +35,7 @@
 			<mvc:exclude-mapping path="/pic/**"/>
 			<mvc:exclude-mapping path="/resource/**"/>
 			<mvc:exclude-mapping path="/article/**"/>
+			<mvc:exclude-mapping path="/admin/**"/>
 			<bean class="com.wanghao.cms.web.CmsInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors> 

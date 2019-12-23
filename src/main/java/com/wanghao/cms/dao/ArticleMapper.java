@@ -2,6 +2,8 @@ package com.wanghao.cms.dao;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
@@ -12,6 +14,7 @@ import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Complain;
 import com.wanghao.cms.entity.Link;
 import com.wanghao.cms.entity.Slide;
 
@@ -158,5 +161,34 @@ public interface ArticleMapper {
 
 	@Select(" SELECT id,url,name,created FROM cms_link  ORDER BY created DESC")
 	List<Link> getLink();
+
+	
+	
+	/**
+	 * 添加评论
+	 * @param complain
+	 * @return
+	 */
+	@Insert("INSERT INTO cms_complain(article_id,user_id,complain_type,"
+			+ "compain_option,src_url,picture,content,email,mobile,created)"
+			+ "   VALUES(#{articleId},#{userId},"
+			+ "#{complainType},#{compainOption},#{srcUrl},#{picture},#{content},#{email},#{mobile},now())")
+	int addCoplain(Complain complain);
+
+	
+	/**
+	 * 更新文章表的字段
+	 * @param articleId
+	 */
+	@Update("UPDATE cms_article SET complainCnt=complainCnt+1,status=if(complainCnt>10,2,status)  "
+			+ " WHERE id=#{value}")
+	void increaseComplainCnt(Integer articleId);
+
+	/**
+	 * 
+	 * @param articleId
+	 * @return
+	 */
+	List<Complain> getComplains(int articleId);
 
 }

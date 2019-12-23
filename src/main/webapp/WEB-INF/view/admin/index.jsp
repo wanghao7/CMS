@@ -57,16 +57,16 @@
 			<!-- 左侧的菜单 -->
 			<ul class="nav flex-column mymenuselected">
 				  <li class="nav-item menuselected ">
-				    <a id="postLink" class="nav-link active" href="#" onclick="showWork($(this),'/admin/article?status=0&page=1')" >文章管理</a>
+				    <a id="postLink" class="nav-link active"  onclick="showWork($(this),'/admin/article?status=0&page=1')" >文章管理</a>
 				  </li>
 				  <li class="nav-item">
-				    <a  class="nav-link" href="#" onclick="showWork($(this),'/user/postArticle')">评论管理</a>
+				    <a  class="nav-link"  onclick="showWork($(this),'/user/postArticle')">评论管理</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link" href="#" onclick="showWork($(this),'/admin/link')" >友情链接管理</a>
+				    <a class="nav-link"  onclick="showWork($(this),'/admin/link')" >友情链接管理</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link " href="#" >用户管理</a>
+				    <a class="nav-link "  >用户管理</a>
 				  </li>
 				</ul>	
 		</div>

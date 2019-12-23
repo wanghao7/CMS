@@ -2,11 +2,14 @@ package com.wanghao.cms.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.entity.Article;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
+import com.wanghao.cms.entity.Complain;
 import com.wanghao.cms.entity.Link;
 import com.wanghao.cms.entity.Slide;
 
@@ -55,5 +58,9 @@ public interface ArticleService {
 	PageInfo<Comment> getComments(int id, int page);
 
 	PageInfo<Link> link(int page);
+
+	int addComplian(@Valid Complain complain);
+
+	PageInfo<Complain> getComplains(int articleId, int page);
 
 }

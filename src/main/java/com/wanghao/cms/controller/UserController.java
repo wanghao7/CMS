@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +77,7 @@ public class UserController {
 		if(result.hasErrors()) {
 			return "user/register";
 		}
-		
+		System.out.println("111111111111111111111111111111111111");
 		//用户名进行唯一性验证
 		User user1 = service.getByUserName(user.getUsername());
 		
@@ -99,6 +101,25 @@ public class UserController {
 		//跳转登录界面
 		return "redirect:login";
 	}
+	/**
+	 * 登出
+	 */
+	@RequestMapping("logout")
+	public String home(HttpServletRequest request,HttpServletResponse response) {
+		request.getSession().removeAttribute(CmsContant.USER_KEY);
+		
+		
+		Cookie cookieUserName = new Cookie("username", "");
+		cookieUserName.setPath("/");
+		cookieUserName.setMaxAge(0);// 覆盖原来的cookieUserName
+		response.addCookie(cookieUserName);
+		Cookie cookieUserPwd = new Cookie("userpwd", "");
+		cookieUserPwd.setPath("/");
+		cookieUserPwd.setMaxAge(0);// 覆盖原来的cookieUserPwd
+		response.addCookie(cookieUserPwd);
+		
+		return "redirect:/";
+	}
 	
 	/**
 	 * 前台(注册时验证)
@@ -119,7 +140,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value="login",method=RequestMethod.POST)
-	public String login(User user,HttpServletRequest request) {
+	public String login(User user,HttpServletRequest request,HttpServletResponse response) {
+		String pwd =  new String(user.getPassword());
 		User u = service.login(user);
 		//如果没有这个对象 返回登录界面
 		if(u==null) {
@@ -128,15 +150,33 @@ public class UserController {
 		}
 		//登录成功,用户信息存进session当中
 		request.getSession().setAttribute(CmsContant.USER_KEY, u);
+		
+		//保存用户名的账号和密码
+		Cookie cookieUserName = new Cookie("username", user.getUsername());
+		//指定客户机应该返回 cookie 的路径
+		cookieUserName.setPath("/");
+		//返回以秒为单位指定的 cookie 最大生存时间。
+		cookieUserName.setMaxAge(10*24*3600);// 10天
+		response.addCookie(cookieUserName);
+		Cookie cookieUserPwd = new Cookie("userpwd", pwd);
+		cookieUserPwd.setPath("/");
+		cookieUserPwd.setMaxAge(10*24*3600);// 10天
+		response.addCookie(cookieUserPwd);
+		
+		
+		
+		
 //		System.out.println("admin_____1____");
 		//判断 并进入管理界面/用户界面
-		System.out.println(u.getRole()+"______");
+//		System.out.println(u.getRole()+"______");
 		if(u.getRole()==CmsContant.USER_ROLE_ADMIN) {
+			System.out.println("________________________-管理员");
 //			System.out.println("admin____2_____");
-			return "/admin/index";
+			return "redirect:/admin/index";
 		}
 //		System.out.println("admin___3______");
-		//需要改
+		
+		
 		return "/user/home";
 	}
 	

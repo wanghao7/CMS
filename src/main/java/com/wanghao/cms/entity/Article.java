@@ -27,16 +27,7 @@ public class Article {
 	private Channel channel      ;//栏目 频道
 	private Category  category     ; //分类
 	private User user ;
-	
-	
-	@Override
-	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
-				+ ", channelId=" + channelId + ", categoryId=" + categoryId + ", userId=" + userId + ", hits=" + hits
-				+ ", hot=" + hot + ", status=" + status + ", deleted=" + deleted + ", created=" + created + ", updated="
-				+ updated + ", commentCnt=" + commentCnt + ", articleType=" + articleType + ", channel=" + channel
-				+ ", category=" + category + ", user=" + user + "]";
-	}
+	private int complainCnt;// 投诉的数量
 	public Integer getId() {
 		return id;
 	}
@@ -145,104 +136,50 @@ public class Article {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + articleType;
-		result = prime * result + ((category == null) ? 0 : category.hashCode());
-		result = prime * result + categoryId;
-		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
-		result = prime * result + channelId;
-		result = prime * result + commentCnt;
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + deleted;
-		result = prime * result + hits;
-		result = prime * result + hot;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((picture == null) ? 0 : picture.hashCode());
-		result = prime * result + status;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		result = prime * result + userId;
-		return result;
+	public int getComplainCnt() {
+		return complainCnt;
+	}
+	public void setComplainCnt(int complainCnt) {
+		this.complainCnt = complainCnt;
+	}
+	public Article(Integer id, String title, String content, String picture, int channelId, int categoryId, int userId,
+			int hits, int hot, int status, int deleted, Date created, Date updated, int commentCnt, int articleType,
+			Channel channel, Category category, User user, int complainCnt) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.content = content;
+		this.picture = picture;
+		this.channelId = channelId;
+		this.categoryId = categoryId;
+		this.userId = userId;
+		this.hits = hits;
+		this.hot = hot;
+		this.status = status;
+		this.deleted = deleted;
+		this.created = created;
+		this.updated = updated;
+		this.commentCnt = commentCnt;
+		this.articleType = articleType;
+		this.channel = channel;
+		this.category = category;
+		this.user = user;
+		this.complainCnt = complainCnt;
 	}
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Article other = (Article) obj;
-		if (articleType != other.articleType)
-			return false;
-		if (category == null) {
-			if (other.category != null)
-				return false;
-		} else if (!category.equals(other.category))
-			return false;
-		if (categoryId != other.categoryId)
-			return false;
-		if (channel == null) {
-			if (other.channel != null)
-				return false;
-		} else if (!channel.equals(other.channel))
-			return false;
-		if (channelId != other.channelId)
-			return false;
-		if (commentCnt != other.commentCnt)
-			return false;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (deleted != other.deleted)
-			return false;
-		if (hits != other.hits)
-			return false;
-		if (hot != other.hot)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (picture == null) {
-			if (other.picture != null)
-				return false;
-		} else if (!picture.equals(other.picture))
-			return false;
-		if (status != other.status)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (updated == null) {
-			if (other.updated != null)
-				return false;
-		} else if (!updated.equals(other.updated))
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		if (userId != other.userId)
-			return false;
-		return true;
+	public String toString() {
+		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
+				+ ", channelId=" + channelId + ", categoryId=" + categoryId + ", userId=" + userId + ", hits=" + hits
+				+ ", hot=" + hot + ", status=" + status + ", deleted=" + deleted + ", created=" + created + ", updated="
+				+ updated + ", commentCnt=" + commentCnt + ", articleType=" + articleType + ", channel=" + channel
+				+ ", category=" + category + ", user=" + user + ", complainCnt=" + complainCnt + "]";
 	}
+	public Article() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
 	
 	
 }
