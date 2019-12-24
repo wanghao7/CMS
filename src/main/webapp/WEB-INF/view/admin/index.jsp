@@ -60,7 +60,8 @@
 				    <a id="postLink" class="nav-link active"  onclick="showWork($(this),'/admin/article?status=0&page=1')" >文章管理</a>
 				  </li>
 				  <li class="nav-item">
-				    <a  class="nav-link"  onclick="showWork($(this),'/user/postArticle')">评论管理</a>
+<!-- 				  onclick="showWork($(this),'/user/postArticle')" -->
+				    <a  class="nav-link"  >评论管理</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link"  onclick="showWork($(this),'/admin/link')" >友情链接管理</a>
@@ -68,6 +69,9 @@
 				  <li class="nav-item">
 				    <a class="nav-link "  >用户管理</a>
 				  </li>
+<!-- 				  <li class="nav-item"> -->
+<!-- 				    <a class="nav-link " onclick="showWork($(this),'/article/complains2')" >投诉列表</a> -->
+<!-- 				  </li> -->
 				</ul>	
 		</div>
 		

@@ -164,4 +164,18 @@ public class ArticleController extends BaseController{
 		request.setAttribute("complianPage", complianPage);
 		return "article/complainslist";
 	}
+	/**
+	 * 投诉列表2
+	 * @param request
+	 * @param articleId
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("complains2")
+	public String 	complains2(HttpServletRequest request,
+			@RequestParam(defaultValue="1") int page) {
+		PageInfo<Complain> complianPage2=   articleService.getComplains2( page);
+		request.setAttribute("complianPage2", complianPage2);
+		return "article/complainslist2";
+	}
 }

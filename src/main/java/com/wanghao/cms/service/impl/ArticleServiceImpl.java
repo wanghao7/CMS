@@ -175,6 +175,12 @@ public class ArticleServiceImpl implements ArticleService {
 		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
 		return new PageInfo<Complain>(articleMapper.getComplains(articleId));
 	}
+
+	@Override
+	public PageInfo<Complain> getComplains2(int page) {
+		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
+		return new PageInfo<Complain>(articleMapper.getComplains2());
+	}
 	
 	
 }

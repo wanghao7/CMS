@@ -34,14 +34,11 @@ private Integer id               ;
 	
 	private Date created          ;
 	
+	
 	private User user;
 	
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	private String username;
+	private String title ;
 	public Integer getId() {
 		return id;
 	}
@@ -108,12 +105,56 @@ private Integer id               ;
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public Complain(Integer id, @NotNull Integer articleId, Integer userId, @NotNull Integer complainType,
+			@NotBlank String compainOption, String srcUrl, String picture, String content, @Email String email,
+			String mobile, Date created, User user, String username, String title) {
+		super();
+		this.id = id;
+		this.articleId = articleId;
+		this.userId = userId;
+		this.complainType = complainType;
+		this.compainOption = compainOption;
+		this.srcUrl = srcUrl;
+		this.picture = picture;
+		this.content = content;
+		this.email = email;
+		this.mobile = mobile;
+		this.created = created;
+		this.user = user;
+		this.username = username;
+		this.title = title;
+	}
 	@Override
 	public String toString() {
 		return "Complain [id=" + id + ", articleId=" + articleId + ", userId=" + userId + ", complainType="
 				+ complainType + ", compainOption=" + compainOption + ", srcUrl=" + srcUrl + ", picture=" + picture
-				+ ", content=" + content + ", email=" + email + ", mobile=" + mobile + ", created=" + created + "]";
+				+ ", content=" + content + ", email=" + email + ", mobile=" + mobile + ", created=" + created
+				+ ", user=" + user + ", username=" + username + ", title=" + title + "]";
 	}
+	public Complain() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
 	
 }

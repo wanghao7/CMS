@@ -18,7 +18,8 @@
 	    <th>状态</th>
 	    <th>投诉数</th>
 	    <th>是否热门</th>
-	    <th>操作</th>
+	    <th>操作1</th>
+	    <th>操作2</th>
 	  </tr>
 	  <c:forEach items="${articlePage.list }" var="article" >
 	  <tr>
@@ -42,7 +43,10 @@
 		<td width="200px">
 			<input type="button" value="删除"  class="btn btn-danger" onclick="del(${article.id})">
 			<input type="button" value="审核"  class="btn btn-warning" onclick="check(${article.id})" >
+		</td>
+		<td>
 			<input type="button" value="投诉管理"  class="btn btn-warning" onclick="complainList(${article.id})" >
+		
 		</td>
 	  </tr>
 	  </c:forEach>
@@ -121,6 +125,9 @@
 	$("#exampleModal").on('hidden.bs.modal', function (e) {
 		refreshPage();
 	})
+	$("#complainModal").on('hidden.bs.modal', function (e) {
+		refreshPage();
+	})
 
 	function gb(status){
 		$("#workcontent").load("/admin/article?page=" + '${articlePage.pageNum}' + "&status="+status);
@@ -151,16 +158,40 @@
 			if(obj.code==1){
 				alert("操作成功");
 				$("#exampleModal").modal('hide');
+				$('#complainModal').modal('hide');
 				//refreshPage();
 				return;
 			}
 			alert(obj.error);
 		},"json")
 	}
+	/**删除
+	*/
+	function del(id){
+		alert(id)
+		if(!confirm("您确认删除么？"))
+			return;
+		
+		$.post('/user/deletearticle',{id:id},
+				function(data){
+					if(data==true){
+						alert("刪除成功")
+						//location.href="#"
+						$("#workcontent").load("/user/articles?pageNum=" + '${articlePage.pageNum}' );
+// 						$("#workcontent").load("/user/articles");
+					}else{
+						alert("刪除失敗")
+					}
+					
+		},"json"				
+		)
+	}
+	
 	/**
 	* 查看文章的投诉
 	*/
 	function complainList(id){
+		 global_article_id = id;
 		$("#complainModal").modal('show')
 		$("#complainListDiv").load("/article/complains?articleId="+id);
 		
@@ -175,8 +206,9 @@
 		$.post("/admin/setArticeHot",{id:id,status:status},function(msg){
 			if(msg.code==1){
 				alert('操作成功')
-				//隐藏当前的模态框
-				$('#exampleModal').modal('hide')
+				//隐藏当前的模态框;
+				$('#exampleModal').modal('hide');
+				$('#complainModal').modal('hide');
 				//刷新当前的页面
 				//refreshPage();
 				return;

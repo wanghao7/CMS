@@ -98,5 +98,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM cms_complain where article_id=#{value}
 	</select>
     
+    <select id="getComplains2" resultType="com.wanghao.cms.entity.Complain">
+		SELECT c.id,c.article_id articleId,c.user_id userId, 
+		complain_type complainType,c.compain_option compainOption, 
+		c.src_url srcUrl,c.picture,c.content,c.email,c.mobile,c.created, 
+		u.username,a.title  
+		FROM cms_complain c  
+		LEFT JOIN cms_article a ON c.article_id=a.id  
+		LEFT JOIN cms_user u ON c.user_id=u.id  
+		ORDER BY a.id 
+    </select>
     
 </mapper>
