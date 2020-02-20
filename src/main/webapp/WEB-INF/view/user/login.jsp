@@ -25,6 +25,9 @@
 		      <p><a  class="text-primary">${error}</a></p>
 		    </div>
 		  </div>
+		  <div style="color:red"  class="form-group">
+		      <input type="checkbox"     >记住登录
+		  </div>
 		  <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-5">
 		    <button type="submit" class="btn btn-primary">登录</button>

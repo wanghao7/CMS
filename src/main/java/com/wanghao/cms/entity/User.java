@@ -1,15 +1,20 @@
 package com.wanghao.cms.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.wanghao.cms.common.Gender;
 
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1853518861168554742L;
 	private int  id             ;// int(11)  
 	@NotBlank(message="用户名不能为空")
 	

@@ -1,11 +1,14 @@
 package com.wanghao.cms.controller;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +25,7 @@ import com.wanghao.cms.common.CmsContant;
 import com.wanghao.cms.common.CmsError;
 import com.wanghao.cms.common.CmsMessage;
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Bookmark;
 import com.wanghao.cms.entity.Comment;
 import com.wanghao.cms.entity.User;
 import com.wanghao.cms.service.ArticleService;
@@ -34,16 +38,24 @@ public class ArticleController extends BaseController{
 
 	@Autowired
 	ArticleService articleService;
-	 
+	
+	//线程池注入 线程池任务执行   executor对象要与配置文件一致
+	@Autowired
+	ThreadPoolTaskExecutor executor;
+	
+	@Autowired
+	RedisTemplate redisTemplate;
+	
 	static int id;
 	@RequestMapping("getDetail")
 	@ResponseBody
-	public CmsMessage getDetail(Integer id) {
+	public CmsMessage getDetail(Integer id,HttpServletRequest request) {
 		if(id<=0) {
 			
 		}
 		//获取文章详情
 		Article article = articleService.getById(id);
+		
 		System.out.println(article);
 		if(article==null) {
 			return new CmsMessage(CmsError.NOT_EXIST,"文章不存在",null);
@@ -54,7 +66,30 @@ public class ArticleController extends BaseController{
 	
 	@RequestMapping("detail")
 	public String detail(HttpServletRequest request,int id) {
+
 		Article article = articleService.getById(id);
+		String userId = request.getRemoteAddr();//用户id
+		String Key = "Hits"+id+userId;
+		String RedisArticle = (String) redisTemplate.opsForValue().get(Key);
+		
+		if(RedisArticle==null) {
+			//Sping线程池
+			executor.execute(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					article.setHits(article.getHits()+1);
+					//更新到数据库
+					articleService.update(article, article.getId()+1);
+					//保存redis,value值为空,有效时长为5分钟
+					//目的:一个用户在5分钟之内,只记录一次浏览量
+					redisTemplate.opsForValue().set(Key, "", 5, TimeUnit.MINUTES);
+					
+				}
+			});
+		}
+		
 		request.setAttribute("article", article);
 		return "detail";
 	}
@@ -107,6 +142,36 @@ public class ArticleController extends BaseController{
 		request.setAttribute("complain", new Complain());
 		return "article/complain";
 				
+	}
+	/**
+	 * 跳转到收藏的页面
+	 * @param request
+	 * @param articleId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("Bookmarks")
+	public Object Bookmarks(HttpServletRequest request,String articleId,String url) {
+		System.err.println(articleId);
+		System.out.println(url);
+		User loginUser  =  (User) request.getSession().getAttribute(CmsContant.USER_KEY);
+		System.out.println(loginUser);
+		if(loginUser!=null) {
+			if(!StringUtils.isHttpUrl(url)) {
+				Article article= articleService.getById(Integer.parseInt(articleId));
+				Bookmark bookmark = new Bookmark(null, article.getTitle(), url, loginUser.getId()+"", "");
+				int i = articleService.addBook(bookmark);
+				if(i>0) {
+					return true;
+				}else {
+					return false;
+				}
+			}
+			return "";
+		}else{
+			return "err";
+			
+		}
 	}
 	
 	

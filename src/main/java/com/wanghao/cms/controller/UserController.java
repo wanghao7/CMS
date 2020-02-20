@@ -30,6 +30,7 @@ import com.wanghao.cms.entity.Channel;
 import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.common.CmsContant;
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Bookmark;
 import com.wanghao.cms.entity.User;
 import com.wanghao.cms.service.ArticleService;
 import com.wanghao.cms.service.UserService;
@@ -197,6 +198,35 @@ public class UserController {
 		request.setAttribute("pg", articlePage);
 		//返回article文件夹下的list界面
 		return "user/article/list";
+	}
+	/**
+	 * 点击左侧导航条 动态加载页面（收藏夹）
+	 */
+	
+	@RequestMapping("bookmarks")
+	public String bookmarks(HttpServletRequest request,@RequestParam(defaultValue="1")int pageNum ) {
+		
+		User user = (User) request.getSession().getAttribute(CmsContant.USER_KEY);
+		
+		PageInfo<Bookmark> articlePage = articleService.bookmarksByUser(user.getId(),pageNum);
+//		List<Article> list = articlePage.getList();
+//		for (Article article : list) {
+//			System.out.println(article);
+//		}
+		request.setAttribute("pg", articlePage);
+		//返回article文件夹下的list界面 
+		return "user/article/bookmarks";
+	}
+	/**
+	 * 修改时返回的布尔类型  前台需要ajax弹框
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("deleteBookmark")
+	@ResponseBody
+	public boolean deleteBookmark(Integer sid) {
+		int result  = articleService.deleteBookmark(sid);
+		return result > 0;
 	}
 	/**
 	 * 修改时返回的布尔类型  前台需要ajax弹框

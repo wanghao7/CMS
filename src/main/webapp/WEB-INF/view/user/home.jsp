@@ -89,6 +89,9 @@
 				    <a class="nav-link" href="#" onclick="showWork($(this),'/user/comments')" >我的评论</a>
 				  </li>
 				  <li class="nav-item">
+				    <a class="nav-link" href="#" onclick="showWork($(this),'/user/bookmarks')" >收藏夹</a>
+				  </li>
+				  <li class="nav-item">
 				    <a class="nav-link " href="#" tabindex="-1" aria-disabled="true">个人设置</a>
 				  </li>
 				</ul>	

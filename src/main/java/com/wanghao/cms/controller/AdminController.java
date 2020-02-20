@@ -25,6 +25,8 @@ public class AdminController {
 	@Autowired
 	private ArticleService articleService;
 	
+	
+	
 	@RequestMapping("index")
 	public String index() {
 		return "admin/index";
@@ -60,6 +62,7 @@ public class AdminController {
 	 * @param id
 	 * @param status
 	 * @return
+	 * setArticleStatus
 	 */
 	@RequestMapping("setArticleStatus")
 	@ResponseBody
@@ -92,6 +95,8 @@ public class AdminController {
 		 *  修改数据
 		 */
 		int result = articleService.setCheckStatus(id,status);
+		//往es里面添加修改后的数据
+		articleService.getInfoById(id);
 		if(result<1)
 			return new CmsMessage(CmsError.FAILED_UPDATE_DB,"设置失败，请稍后再试",null);
 		

@@ -21,6 +21,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  WHERE user_id = #{value} AND deleted=0
 		  ORDER BY id DESC  
 	</select>
+	<select id="bookmarksByUser" resultType="com.wanghao.cms.entity.Bookmark">
+		SELECT cms_scj.* FROM cms_scj WHERE uid=#{value} ORDER BY created DESC  
+	</select>
 	
 	<!-- 获取频道 resultMap的查找方法 -->
 	<select id="findChannel" resultType="channel">

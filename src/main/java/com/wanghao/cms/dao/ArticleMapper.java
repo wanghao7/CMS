@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
@@ -11,6 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Bookmark;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
@@ -52,8 +54,8 @@ public interface ArticleMapper {
 	 * @param article
 	 * @return
 	 */
-	@Insert("insert into cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt,articleType) "
-			+ " VALUES(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0,#{articleType})")	
+	@Insert("insert into cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt,articleType,abstrac) "
+			+ " VALUES(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0,#{articleType},#{abstrac})")	
 	int add(Article article);
 
 	/**
@@ -192,5 +194,30 @@ public interface ArticleMapper {
 	List<Complain> getComplains(int articleId);
 
 	List<Complain> getComplains2();
+
+	@Select(" select * from cms_article where status=#{status}")
+	List<Article> findAllArticleWithStatus(Integer status);
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Select("SELECT id,title,channel_id channelId , category_id categoryId,status ,hot "
+			+ " FROM cms_article WHERE id = #{value} ")
+	Article getInfoById2(Integer id);
+
+	@Insert("  UPDATE cms_article set hits=#{hits} where id=#{value} ")
+	void hitsAdd(@Param("value")int value, @Param("hits")int hits);
+
+//	@Insert("INSERT INTO cms_comment(articleId,userId,content,created) "
+//			+ "VALUES(#{articleId},#{userId},#{content},NOW());")
+	@Insert(" insert into cms_scj(text,url,uid,created) "
+			+ " values(#{text},#{url},#{uid},NOW())  ")
+	int addBook(Bookmark bookmark);
+
+	List<Bookmark> bookmarksByUser(int id);
+	@Delete("delete from cms_scj where sid=#{sid}")
+	int deleteBookmark(Integer sid);
 
 }

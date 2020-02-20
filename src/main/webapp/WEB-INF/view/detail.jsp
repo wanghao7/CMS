@@ -10,7 +10,19 @@
 <script type="text/javascript" src="/resource/js/jquery-3.2.1/jquery.js"></script>
 <link href="/resource/bootstrap-4.3.1/dist/css/bootstrap.css" rel="stylesheet">
 <script type="text/javascript" src="/resource/bootstrap-4.3.1/dist/js/bootstrap.js"></script>
-
+<script type="text/javascript">
+	function bookmark(id){
+		var test = window.location.href;
+		alert(test);
+		$.post("Bookmarks",{url:test,articleId:id},function(flag){
+			if(flag){
+				alert("已添加至收藏!");
+			}else{
+				alert("地址不合法!");
+			}
+		},"json")
+	}
+</script>
 </head>
 <body>
 	<div class="container" >
@@ -25,6 +37,8 @@
 			发表时间：<fmt:formatDate value="${article.created}" pattern="yyyy-MM-dd"/> 
 			</h6>
 			<a href="/article/complain?articleId=${article.id}">投诉</a>
+<%-- 			<a href="/article/Bookmarks?articleId=${article.id}">收藏</a> --%>
+			<input type="button" onclick="bookmark(${article.id})" value="收藏" >
 		</div>
 		<div  style="margin-top:30px">
 			${article.content}

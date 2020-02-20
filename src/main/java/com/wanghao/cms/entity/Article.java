@@ -1,17 +1,30 @@
 package com.wanghao.cms.entity;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 /**
  * 文章
  * @author hp
  *
  */
-public class Article {
+//es数据库名 cms_es  表名称 article
+@Document(indexName="cms_es",type="article")
+public class Article implements Serializable {
 
+	@Id//id是Integer类型
 	private Integer id;
+	//使用注解   分析器 用ik分词器 ik_smart  创建索引 并储存 客户输入的类型用ik分词器进行分词  客户输入的类型是text类型
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String  title;  //标题
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String  content;//文章内容
 	private String  picture;//图片地址
+	private String  abstrac;//摘要
 	private int     channelId;//栏目
 	private int     categoryId;//分类
 	private int     userId;//用户ID
@@ -51,6 +64,12 @@ public class Article {
 	}
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+	public String getAbstrac() {
+		return abstrac;
+	}
+	public void setAbstrac(String abstrac) {
+		this.abstrac = abstrac;
 	}
 	public int getChannelId() {
 		return channelId;
@@ -142,14 +161,15 @@ public class Article {
 	public void setComplainCnt(int complainCnt) {
 		this.complainCnt = complainCnt;
 	}
-	public Article(Integer id, String title, String content, String picture, int channelId, int categoryId, int userId,
-			int hits, int hot, int status, int deleted, Date created, Date updated, int commentCnt, int articleType,
-			Channel channel, Category category, User user, int complainCnt) {
+	public Article(Integer id, String title, String content, String picture, String abstrac, int channelId,
+			int categoryId, int userId, int hits, int hot, int status, int deleted, Date created, Date updated,
+			int commentCnt, int articleType, Channel channel, Category category, User user, int complainCnt) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.picture = picture;
+		this.abstrac = abstrac;
 		this.channelId = channelId;
 		this.categoryId = categoryId;
 		this.userId = userId;
@@ -168,16 +188,19 @@ public class Article {
 	}
 	@Override
 	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
-				+ ", channelId=" + channelId + ", categoryId=" + categoryId + ", userId=" + userId + ", hits=" + hits
-				+ ", hot=" + hot + ", status=" + status + ", deleted=" + deleted + ", created=" + created + ", updated="
-				+ updated + ", commentCnt=" + commentCnt + ", articleType=" + articleType + ", channel=" + channel
-				+ ", category=" + category + ", user=" + user + ", complainCnt=" + complainCnt + "]";
+		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture + ", abstrac="
+				+ abstrac + ", channelId=" + channelId + ", categoryId=" + categoryId + ", userId=" + userId + ", hits="
+				+ hits + ", hot=" + hot + ", status=" + status + ", deleted=" + deleted + ", created=" + created
+				+ ", updated=" + updated + ", commentCnt=" + commentCnt + ", articleType=" + articleType + ", channel="
+				+ channel + ", category=" + category + ", user=" + user + ", complainCnt=" + complainCnt + "]";
 	}
 	public Article() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
 	
 	
 	

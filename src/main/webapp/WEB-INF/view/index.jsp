@@ -24,13 +24,9 @@
 }
 
 </style>
-<script type="text/javascript">
-// 	function bs(own){
-// 		$("#bs").removeClass();
-// 		own.addClass("disabled");
-// 		alert("fdsafds");
-// 	}
-</script>
+<!-- <script type="text/javascript"> -->
+<%--  alert('${article.title}'); --%>
+<!-- </script> -->
 </head>
 <body>
 	<!-- 	导航条 -->
@@ -89,6 +85,7 @@
 						<c:forEach items="${articlePage.list}" var="article">
 							<div class="row" style="margin-top:5px">
 								<div class="col-md-3">
+<%-- 								/pic/${article.picture} --%>
 									<img width="130px" height="120px" src="/pic/${article.picture}" 
 									  onerror="this.src='/resource/images/guest.jpg'"
 									  class="rounded" 
@@ -112,7 +109,7 @@
 								  <ul class="pagination ">
 								  
 								    <li class="page-item">
-								      <a class="page-link" href="/index?page=${articlePage.pageNum-1}" aria-label="Previous">
+								      <a class="page-link" href="/index?page=${articlePage.pageNum==1?1:articlePage.pageNum-1}&key=${key}" aria-label="Previous">
 								        <span aria-hidden="true">&laquo;</span>
 								      </a>
 								    </li>
@@ -126,13 +123,13 @@
 								  		
 								  		<!-- 非当前页码的处理 -->
 										<c:if test="${articlePage.pageNum!=index.index}">
-								    		<li class="page-item"><a class="page-link" href="/index?page=${index.index}"> ${index.index}</a></li>
+								    		<li class="page-item"><a class="page-link" href="/index?page=${index.index}&key=${key}"> ${index.index}</a></li>
 								  		</c:if>
 								  
 								    </c:forEach>
 								    
 								    <li class="page-item">
-								      <a class="page-link" href="/index?page=${articlePage.pageNum+1}" aria-label="Next">
+								      <a class="page-link" href="/index?page=${articlePage.pageNum==articlePage.pages?articlePage.pageNum:articlePage.pageNum+1}&key=${key}" aria-label="Next">
 								        <span aria-hidden="true">&raquo;</span>
 								      </a>
 								    </li>

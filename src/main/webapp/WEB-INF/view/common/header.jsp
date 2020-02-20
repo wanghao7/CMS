@@ -12,9 +12,9 @@
       </li> 
     </ul>
     
-    <form class="form-inline my-2 my-lg-0" style="margin-right:30%" >
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <form action="/index"  class="form-inline my-2 my-lg-0" style="margin-right:30%"  >
+      <input value="${key }" class="form-control mr-sm-2" name="key" type="search" placeholder="输入关键字..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
     </form>
     
     <div>

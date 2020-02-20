@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Bookmark;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
@@ -64,5 +65,12 @@ public interface ArticleService {
 	PageInfo<Complain> getComplains(int articleId, int page);
 
 	PageInfo<Complain> getComplains2(int page);
+
+
+	int addBook(Bookmark bookmark);
+
+	PageInfo<Bookmark> bookmarksByUser(int id, int pageNum);
+
+	int deleteBookmark(Integer sid);
 
 }

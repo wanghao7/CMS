@@ -1,18 +1,24 @@
 package com.wanghao.cms.service.impl;
 
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.wanghao.cms.dao.SlideMapper;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wanghao.cms.common.CmsContant;
 import com.wanghao.cms.dao.ArticleMapper;
 import com.wanghao.cms.entity.Article;
+import com.wanghao.cms.entity.Bookmark;
 import com.wanghao.cms.entity.Category;
 import com.wanghao.cms.entity.Channel;
 import com.wanghao.cms.entity.Comment;
@@ -29,6 +35,13 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	SlideMapper slideMapper;
 	
+	@Autowired
+	KafkaTemplate<String,String> kafkaTemplate ;
+	
+	//自动注入redisRemplate
+	@Autowired
+	RedisTemplate redisTemplate;
+	
 	@Override
 	public PageInfo<Article> listByUser(int id, int pageNum) {
 		// TODO Auto-generated method stub
@@ -36,10 +49,20 @@ public class ArticleServiceImpl implements ArticleService {
 		PageInfo<Article> articlePage = new PageInfo<Article>(articleMapper.listByUser(id));
 		return articlePage;
 	}
+	@Override
+	public PageInfo<Bookmark> bookmarksByUser(int id, int pageNum) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNum, CmsContant.PAGE_SIZE);
+		PageInfo<Bookmark> bookmarkList = new PageInfo<Bookmark>(articleMapper.bookmarksByUser(id));
+		return bookmarkList;
+	}
 
 	@Override
 	public int delete(Integer id) {
 		// TODO Auto-generated method stub
+		Article infoById = articleMapper.getInfoById2(id);
+		String jsonString = JSON.toJSONString(infoById);
+		kafkaTemplate.send("articles", "del"+jsonString);
 		return articleMapper.delete(id);
 	}
 
@@ -58,13 +81,20 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public int add(Article article) {
 		// TODO Auto-generated method stub
+		
 		return articleMapper.add(article);
 	}
-
+	
+	
 	@Override
 	public Article getById(int id) {
 		// TODO Auto-generated method stub
-		return articleMapper.getById(id);
+		Article articleInfo = articleMapper.getById(id);
+//		String jsonString = JSON.toJSONString(articleInfo);
+//		//让kafka执行点击数加一操作
+//		kafkaTemplate.send("articles","inf"+jsonString);
+		
+		return articleInfo;
 	}
 
 	@Override
@@ -83,10 +113,13 @@ public class ArticleServiceImpl implements ArticleService {
 		return new PageInfo<Article>(articleMapper.list(status));
 	}
 
-	@Override
+	@Override//发送到kafka然后再发送给es以及数据库
 	public Article getInfoById(int id) {
 		// TODO Auto-generated method stub
-		return articleMapper.getInfoById(id);
+		Article infoById = articleMapper.getInfoById(id);
+		String jsonString = JSON.toJSONString(infoById);
+		kafkaTemplate.send("articles", "add"+jsonString);
+		return infoById;
 	}
 
 	@Override
@@ -181,6 +214,19 @@ public class ArticleServiceImpl implements ArticleService {
 		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
 		return new PageInfo<Complain>(articleMapper.getComplains2());
 	}
+
+	@Override
+	public int addBook(Bookmark bookmark) {
+		// TODO Auto-generated method stub
+		return articleMapper.addBook(bookmark);
+	}
+	@Override
+	public int deleteBookmark(Integer sid) {
+		// TODO Auto-generated method stub
+		return articleMapper.deleteBookmark(sid);
+	}
+
+	
 	
 	
 }
